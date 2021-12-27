@@ -2,22 +2,23 @@ import React from 'react';
 import { 
   Text,
   View,
-  Image,
-  StatusBar
+  Image
 } from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 import { ButtonIcon } from '../../components/ButtonIcon';
 import IllustrationImg from '../../assets/illustration.png';
 import { styles } from './styles';
 
 export function SignIn() {
+  const navigation = useNavigation();
+
+  function handleSignIn() {
+    navigation.navigate('Home');
+  }
+
   return (
     <View style={ styles.container }>
-      <StatusBar
-        barStyle={"light-content"}
-        backgroundColor={"transparent"}
-        translucent
-      />
       <Image
         source={ IllustrationImg }
         style={ styles.image }
@@ -38,7 +39,7 @@ export function SignIn() {
 
         <ButtonIcon
           title='Entrar com Discord'
-          activeOpacity={0.7}
+          onPress={ handleSignIn }
         />
       </View>
     </View>
