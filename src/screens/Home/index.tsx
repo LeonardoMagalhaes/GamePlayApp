@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { Profile } from "../../components/Profile";
 import { ButtonAdd } from "../../components/ButtonAdd";
@@ -13,6 +14,8 @@ import { FlatList } from "react-native-gesture-handler";
 
 export function Home() {
   const [category, setCategory] = useState('');
+  
+  const navigation = useNavigation();
 
   const appointments = [
     {
@@ -26,23 +29,44 @@ export function Home() {
       category: '1',
       date: '22/06 às 20:40h',
       description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
+    },
+    {
+      id: '2',
+      guild: {
+        id: '2',
+        name: 'Lendários',
+        icon: null,
+        owner: true
+      },
+      category: '1',
+      date: '22/06 às 20:40h',
+      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
     }
   ]
 
   function handleCategorySelect(categoryId: string) {
     categoryId === category ? setCategory('') : setCategory(categoryId);
   }
+  
+  function handleAppintmentDetails() {
+    navigation.navigate('AppointmentDetails');
+  }
+
+  function handleAppointmentCreate() {
+    navigation.navigate('AppointmentCreate');
+  }
 
   return(
     <View>
       <View style={ styles.header }>
         <Profile />
-        <ButtonAdd />
+        <ButtonAdd onPress={handleAppointmentCreate} />
       </View>
 
       <CategorySelect
         categorySelected={category}
         setCategory={handleCategorySelect}
+        hasCheckBox={false}
       />
 
       <View style={styles.content}>
@@ -59,7 +83,10 @@ export function Home() {
           style={styles.matches}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
-            <Appointment data={item} />
+            <Appointment
+              data={item}
+              onPress={handleAppintmentDetails}
+            />
           )}
           ItemSeparatorComponent={() => <ListDivider />}
         />          
