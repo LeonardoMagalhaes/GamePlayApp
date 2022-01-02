@@ -1,154 +1,94 @@
-import React, { useState } from "react";
-import { FlatList, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState, useCallback } from 'react';
+import { View, FlatList } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { Profile } from "../../components/Profile";
-import { ButtonAdd } from "../../components/ButtonAdd";
-import { ListHeader } from "../../components/ListHeader";
-import { Appointment } from "../../components/Appointment";
-import { ListDivider } from "../../components/ListDivider";
-import { CategorySelect } from "../../components/CategorySelect";
+import { CategorySelect } from '../../components/CategorySelect';
+import { Appointment, AppointmentProps } from '../../components/Appointment';
+import { ListDivider } from '../../components/ListDivider';
+import { ListHeader } from '../../components/ListHeader';
+import { Background } from '../../components/Background';
+import { ButtonAdd } from '../../components/ButtonAdd';
+import { Profile } from '../../components/Profile';
+import { Load } from '../../components/Load';
 
-import { styles } from "./style";
+import { styles } from './styles';
+import { COLLECTION_APPOINTMENTS } from '../../configs/database';
 
 export function Home() {
   const [category, setCategory] = useState('');
-  
+  const [loading, setLoading] = useState(true);
+  const [appointments, setAppointments] = useState<AppointmentProps[]>([]);
+
   const navigation = useNavigation();
 
-  const appointments = [
-    {
-      id: '1',
-      guild: {
-        id: '1',
-        name: 'Lendários',
-        icon: null,
-        owner: true
-      },
-      category: '1',
-      date: '22/06 às 20:40h',
-      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
-    },
-    {
-      id: '2',
-      guild: {
-        id: '2',
-        name: 'Lendários',
-        icon: null,
-        owner: true
-      },
-      category: '1',
-      date: '22/06 às 20:40h',
-      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
-    },
-    {
-      id: '3',
-      guild: {
-        id: '2',
-        name: 'Lendários',
-        icon: null,
-        owner: true
-      },
-      category: '1',
-      date: '22/06 às 20:40h',
-      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
-    },
-    {
-      id: '4',
-      guild: {
-        id: '2',
-        name: 'Lendários',
-        icon: null,
-        owner: true
-      },
-      category: '1',
-      date: '22/06 às 20:40h',
-      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
-    },
-    {
-      id: '5',
-      guild: {
-        id: '2',
-        name: 'Lendários',
-        icon: null,
-        owner: true
-      },
-      category: '1',
-      date: '22/06 às 20:40h',
-      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
-    },
-    {
-      id: '6',
-      guild: {
-        id: '2',
-        name: 'Lendários',
-        icon: null,
-        owner: true
-      },
-      category: '1',
-      date: '22/06 às 20:40h',
-      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
-    },
-    {
-      id: '7',
-      guild: {
-        id: '2',
-        name: 'Lendários',
-        icon: null,
-        owner: true
-      },
-      category: '1',
-      date: '22/06 às 20:40h',
-      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
-    }
-  ]
 
   function handleCategorySelect(categoryId: string) {
     categoryId === category ? setCategory('') : setCategory(categoryId);
-  }
+  } 
   
-  function handleAppintmentDetails() {
-    navigation.navigate('AppointmentDetails');
-  }
-
+  function handleAppointmentDetails(guildSelected: AppointmentProps) {
+    navigation.navigate('AppointmentDetails', { guildSelected });
+  } 
+  
   function handleAppointmentCreate() {
     navigation.navigate('AppointmentCreate');
+  } 
+  
+  async function loadAppointments() {
+    const response = await AsyncStorage.getItem(COLLECTION_APPOINTMENTS);
+    const storage: AppointmentProps[] = response ? JSON.parse(response) : [];
+
+    if(category){
+      setAppointments(storage.filter(item => item.category === category));
+    }else{
+      setAppointments(storage)
+    }
+    
+    setLoading(false);
   }
 
-  return(
-    <View>
-      <View style={ styles.header }>
-        <Profile />
-        <ButtonAdd onPress={handleAppointmentCreate} />
-      </View>
+  useFocusEffect(useCallback(() => {
+    loadAppointments();
+  },[category]));
 
-      <CategorySelect
+  return (
+    <Background>
+      <View style={styles.header}>
+        <Profile />
+        <ButtonAdd onPress={handleAppointmentCreate}/>
+      </View>
+    
+      <CategorySelect 
         categorySelected={category}
         setCategory={handleCategorySelect}
-        hasCheckBox={false}
       />
-
-      <ListHeader 
-        title="Partidas agendadas"
-        subtitle="Total 6"
-      />   
-
-      {/* Scrolview é indicado quando se tem poucos elementos a serem listados.
+    
+    {
+      loading ? <Load /> :
+      <>
+        <ListHeader 
+          title="Partidas agendadas"
+          subtitle={`Total ${appointments.length}`}
+        />
+        {/* Scrolview é indicado quando se tem poucos elementos a serem listados.
         Já a FlatList é mais performática e lida melhor com a renderização de mais elementos. Ela vai renderizando aos poucos */}
-      <FlatList
-        data={appointments}
-        keyExtractor={item => item.id}
-        style={styles.matches}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 69 }}
-        ItemSeparatorComponent={() => <ListDivider />}
-        renderItem={({ item }) => (
-          <Appointment
-          data={item}
-          onPress={handleAppintmentDetails}
-          />
-        )}
-      />
-    </View>
-  );
-};
+        <FlatList 
+          data={appointments}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <Appointment 
+              data={item} 
+              onPress={() => handleAppointmentDetails(item)}
+            />            
+          )}
+          ItemSeparatorComponent={() => <ListDivider />}
+          contentContainerStyle={{ paddingBottom: 69 }}
+          style={styles.matches}
+          showsVerticalScrollIndicator={false}
+        />
+      </>
+      }
+    </Background>
+  );  
+}

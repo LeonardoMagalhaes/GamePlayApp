@@ -1,25 +1,17 @@
-import React from "react";
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 
-import { useAuth } from "../hooks/auth";
+import { useAuth } from '../hooks/auth';
+
 import { SignIn } from '../screens/SignIn';
-import { AuthRoutes } from './auth.routes';
-import { theme } from "../global/styles/theme";
+import { AppRoutes } from './app.routes';
 
 export function Routes(){
   const { user } = useAuth();
 
-  const navTheme = {
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      background: theme.colors.secondary100,
-    }
-  };
-
   return(
-    <NavigationContainer theme={navTheme}>
-      { user.id ? <AuthRoutes /> : <SignIn /> }
+    <NavigationContainer>
+     { user.id ? <AppRoutes /> : <SignIn /> }
     </NavigationContainer>
-  );
+  )
 }

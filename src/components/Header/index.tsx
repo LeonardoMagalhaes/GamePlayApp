@@ -1,32 +1,29 @@
-import React, { ReactNode } from "react";
-import { Text, View } from 'react-native';
-import { LinearGradient } from "expo-linear-gradient";
-import { BorderlessButton } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import React, { ReactNode } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import { BorderlessButton } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
+import { Text, View } from 'react-native';
 
-import { styles } from "./styles";
-import { theme } from "../../global/styles/theme";
+import { theme } from '../../global/styles/theme';
+import { styles } from './style';
 
 type Props = {
   title: string;
   action?: ReactNode;
 }
 
-export function Header({
-  title,
-  action
-} : Props) {
+export function Header({ title, action}: Props ){
   const { secondary100, secondary40, heading } = theme.colors;
 
   const navigation = useNavigation();
-  
-  function handleGoBack() {
+
+  function handleGoBack(){
     navigation.goBack();
   }
 
-  return(
-    <LinearGradient
+  return (
+    <LinearGradient 
       style={styles.container}
       colors={[secondary100, secondary40]}
     >
@@ -37,16 +34,19 @@ export function Header({
           color={heading}
         />
       </BorderlessButton>
+
       <Text style={styles.title}>
         { title }
       </Text>
 
-      { action ?
+      {
+        action 
+        ? 
         <View>
           { action }
         </View>
         :
-        <View style={{ width: 24 }} />
+        <View style={{ width: 24 }}/>
       }
     </LinearGradient>
   );

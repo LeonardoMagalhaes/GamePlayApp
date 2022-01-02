@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native";
-import { theme } from "../../global/styles/theme";
+import { StyleSheet } from 'react-native';
+import { theme } from '../../global/styles/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -16,6 +16,6 @@ export const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: theme.colors.secondary30,
     alignSelf: 'center',
-    marginTop: 13
+    marginTop: 13,
   }
 });
