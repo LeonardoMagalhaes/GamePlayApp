@@ -10,16 +10,11 @@ import React,
 import * as AuthSession from 'expo-auth-session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// const { SCOPE } = process.env;
-// const { CLIENT_ID } = process.env;
-// const { CDN_IMAGE } = process.env;
-// const { REDIRECT_URI } = process.env;
-// const { RESPONSE_TYPE } = process.env;
-const REDIRECT_URI ='https://auth.expo.io/@anonymous/gameplay-3dea4e0b-3705-4565-8581-8cb38408f9d6';
-const SCOPE ='identify%20email%20connections%20guilds';
-const RESPONSE_TYPE ='token';
-const CLIENT_ID ='926534484805963837';
-const CDN_IMAGE ='https://cdn.discordapp.com';
+const { SCOPE } = process.env;
+const { CLIENT_ID } = process.env;
+const { CDN_IMAGE } = process.env;
+const { REDIRECT_URI } = process.env;
+const { RESPONSE_TYPE } = process.env;
 
 import { api } from '../services/api';
 import { COLLECTION_USERS } from '../configs/database';
