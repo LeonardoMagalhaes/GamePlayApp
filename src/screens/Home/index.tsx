@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { FlatList, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Profile } from "../../components/Profile";
@@ -10,7 +10,6 @@ import { ListDivider } from "../../components/ListDivider";
 import { CategorySelect } from "../../components/CategorySelect";
 
 import { styles } from "./style";
-import { FlatList } from "react-native-gesture-handler";
 
 export function Home() {
   const [category, setCategory] = useState('');
@@ -32,6 +31,66 @@ export function Home() {
     },
     {
       id: '2',
+      guild: {
+        id: '2',
+        name: 'Lendários',
+        icon: null,
+        owner: true
+      },
+      category: '1',
+      date: '22/06 às 20:40h',
+      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
+    },
+    {
+      id: '3',
+      guild: {
+        id: '2',
+        name: 'Lendários',
+        icon: null,
+        owner: true
+      },
+      category: '1',
+      date: '22/06 às 20:40h',
+      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
+    },
+    {
+      id: '4',
+      guild: {
+        id: '2',
+        name: 'Lendários',
+        icon: null,
+        owner: true
+      },
+      category: '1',
+      date: '22/06 às 20:40h',
+      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
+    },
+    {
+      id: '5',
+      guild: {
+        id: '2',
+        name: 'Lendários',
+        icon: null,
+        owner: true
+      },
+      category: '1',
+      date: '22/06 às 20:40h',
+      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
+    },
+    {
+      id: '6',
+      guild: {
+        id: '2',
+        name: 'Lendários',
+        icon: null,
+        owner: true
+      },
+      category: '1',
+      date: '22/06 às 20:40h',
+      description: 'É hoje que vamos chegar ao challenger sem perder uma partida da m10'
+    },
+    {
+      id: '7',
       guild: {
         id: '2',
         name: 'Lendários',
@@ -69,28 +128,27 @@ export function Home() {
         hasCheckBox={false}
       />
 
-      <View style={styles.content}>
-        <ListHeader 
-          title="Partidas agendadas"
-          subtitle="Total 6"
-        />
+      <ListHeader 
+        title="Partidas agendadas"
+        subtitle="Total 6"
+      />   
 
-        {/* Scrolview é indicado quando se tem poucos elementos a serem listados.
+      {/* Scrolview é indicado quando se tem poucos elementos a serem listados.
         Já a FlatList é mais performática e lida melhor com a renderização de mais elementos. Ela vai renderizando aos poucos */}
-        <FlatList
-          data={appointments}
-          keyExtractor={item => item.id}
-          style={styles.matches}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <Appointment
-              data={item}
-              onPress={handleAppintmentDetails}
-            />
-          )}
-          ItemSeparatorComponent={() => <ListDivider />}
-        />          
-      </View>
+      <FlatList
+        data={appointments}
+        keyExtractor={item => item.id}
+        style={styles.matches}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 69 }}
+        ItemSeparatorComponent={() => <ListDivider />}
+        renderItem={({ item }) => (
+          <Appointment
+          data={item}
+          onPress={handleAppintmentDetails}
+          />
+        )}
+      />
     </View>
   );
 };
